@@ -1,31 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Khaled Said Ahmed - CV</title>
+  <!-- استيراد Font Awesome لعرض الأيقونات -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- استيراد مكتبة html2pdf لتحويل الصفحة إلى PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
   <style>
+    /* ---------- الأنماط العامة ---------- */
     body {
       font-family: Arial, sans-serif;
       color: #333;
-      background-color: #fff;
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
       margin: 20px;
       padding: 0;
       line-height: 1.6;
+      transition: background-color 0.3s ease;
     }
+    /* ---------- نمط الهيدر (الرأس) ---------- */
     .header {
       text-align: center;
       margin-bottom: 30px;
+      padding: 20px;
+      background-color: #3498db; /* لون أزرق واضح */
+      color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, opacity 0.3s ease;
     }
     .header h1 {
       font-size: 28px;
       font-weight: bold;
-      color: #2c3e50;
       margin-bottom: 5px;
     }
     .header p {
       margin: 3px 0;
       font-size: 16px;
     }
+    /* ---------- العناوين الرئيسية للأقسام ---------- */
     h2 {
       font-size: 22px;
       font-weight: bold;
@@ -47,101 +60,506 @@
       list-style-type: disc;
       margin-left: 40px;
     }
+    /* ---------- نمط الأقسام الرئيسية مع تأثير حركة بسيط ---------- */
     .section {
       margin-bottom: 25px;
+      animation: fadeInUp 0.6s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* ---------- تأثير التمرير على الهيدر ---------- */
+    body.scrolling-down .header {
+      transform: translateY(-10px);
+      opacity: 0.8;
+    }
+    body.scrolling-up .header {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    /* ---------- أزرار العمل العلوية الدائمة ---------- */
+    .action-buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .action-buttons button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: 2px solid #3498db;
+      background-color: white;
+      color: #3498db;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s;
+    }
+    .action-buttons button:hover {
+      background-color: #3498db;
+      color: white;
+      transform: scale(1.05);
+    }
+    /* ---------- أنماط المودالات (الشاشات المنبثقة) مع تأثيرات حركة انسيابية ---------- */
+    .modal {
+      display: none; /* مخفية افتراضيًا */
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.4);
+      animation: modalFadeIn 0.5s ease;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 8% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 90%;
+      max-width: 500px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      animation: slideDown 0.5s ease;
+    }
+    @keyframes slideDown {
+      from { transform: translateY(-20px); }
+      to { transform: translateY(0); }
+    }
+    .modal-content h2 {
+      margin-top: 0;
+      font-size: 24px;
+      color: #3498db;
+    }
+    .modal-content p {
+      margin: 15px 0;
+      font-size: 16px;
+    }
+    .modal-buttons, .modal-actions {
+      margin: 15px 0;
+    }
+    .modal-buttons button, .modal-actions button {
+      margin: 0 8px;
+      padding: 10px 16px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 4px;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+    .modal-buttons button {
+      background-color: #2980b9;
+      color: white;
+    }
+    .modal-buttons button:hover {
+      background-color: #1f6391;
+      transform: scale(1.05);
+    }
+    .modal-actions button {
+      background-color: #27ae60;
+      color: white;
+    }
+    .modal-actions button:hover {
+      background-color: #1e8c4d;
+      transform: scale(1.05);
+    }
+    .close-modal {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin-top: 10px;
+      transition: background-color 0.3s ease, transform 0.2s;
+    }
+    .close-modal:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+    }
+    /* ---------- أنماط المحتوى العربي ---------- */
+    .arabic {
+      direction: rtl;
+      text-align: right;
+    }
+    .arabic-content {
+      display: none;
+    }
+    /* ---------- إخفاء المودالات أثناء الطباعة ---------- */
+    @media print {
+      #welcomeModal, #thankYouModal, #exitModal {
+        display: none !important;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- ==================== مودال الترحيب ==================== -->
+  <!-- يتم ضبط محتوى هذا المودال تلقائيًا بناءً على إعدادات المتصفح -->
+  <div id="welcomeModal" class="modal"></div>
 
-  <div class="header">
-    <h1>Khaled Said Ahmed</h1>
-    <p><strong>Experienced Accountant | 5+ Years in Diverse Accounting Roles</strong></p>
-    <p>Egypt – Alexandria</p>
-    <p>Mobile: +20 1155244367 / +20 1142237574</p>
-    <p>Email: khaledsaidahmed1@gmail.com | LinkedIn: linkedin.com/in/khaled-said-ahmed</p>
-    <p>Date of Birth: 27 June 1995</p>
+  <!-- ==================== أزرار العمل العلوية الدائمة ==================== -->
+  <div class="action-buttons">
+    <button onclick="printCV()"><i class="fa-solid fa-print"></i> Print</button>
+    <button onclick="downloadPDF()"><i class="fa-solid fa-download"></i> Download PDF</button>
+    <button onclick="toggleLanguage()"><i class="fa-solid fa-language"></i> Toggle Language</button>
   </div>
 
-  <div class="section">
-    <h2>Professional Summary</h2>
-    <p>Dedicated and results-driven accountant with over 5 years of experience in financial management, reporting, cost control, and reconciliations. Proven leader with expertise in ERP systems, Power BI, SQL, and advanced financial tools. Committed to delivering accurate financial data, optimizing processes, and ensuring compliance with international standards and tax regulations.</p>
+  <!-- ==================== محتوى السيرة الذاتية بالإنجليزية ==================== -->
+  <div id="englishContent">
+    <!-- الهيدر يحتوي على الاسم والمعلومات الأساسية -->
+    <div class="header">
+      <h1>Khaled Said Ahmed</h1>
+      <p><strong>Experienced Accountant | 5+ Years in Diverse Accounting Roles</strong></p>
+      <p>Egypt – Alexandria</p>
+      <p><i class="fa-solid fa-phone"></i> +20 1155244367 / +20 1142237574</p>
+      <p><i class="fa-solid fa-envelope"></i> khaledsaidahmed1@gmail.com | <i class="fa-brands fa-linkedin"></i> linkedin.com/in/khaled-said-ahmed</p>
+      <p>Date of Birth: 27 June 1995</p>
+    </div>
+    <!-- قسم الملخص المهني -->
+    <div class="section">
+      <h2>Professional Summary</h2>
+      <p>Dedicated and results-driven accountant with over 5 years of experience in financial management, reporting, cost control, and reconciliations. Proven leader with expertise in ERP systems, Power BI, SQL, and advanced financial tools. Committed to delivering accurate financial data, optimizing processes, and ensuring compliance with international standards and tax regulations.</p>
+    </div>
+    <!-- قسم الخبرة العملية -->
+    <div class="section">
+      <h2>Work Experience</h2>
+      <h3>Deputy Account Manager</h3>
+      <p><strong>Nutopia LLC – Food &amp; Beverage Manufacturing Company | Full Time | Jan 2023 – Present</strong></p>
+      <ul>
+        <li>Streamlined monthly adjustments, provisions, and accruals, resulting in actionable financial reports and enhanced variance analysis.</li>
+        <li>Played a pivotal role in monthly and annual account closures by reviewing trial balances and maintaining accurate balance sheets.</li>
+        <li>Optimized production costs and inventory management by monitoring raw material usage and production efficiency.</li>
+        <li>Assisted in preparing taxation reports to ensure regulatory compliance.</li>
+        <li>Led a 7-member accounting team, overseeing daily operations.</li>
+      </ul>
+      <h3>General Accountant (Part-Time)</h3>
+      <p><strong>Import and Distribution Company | Dec 2021 – Present</strong></p>
+      <ul>
+        <li>Managed full-cycle accounting operations with monthly, quarterly, and annual closings.</li>
+        <li>Maintained accurate balance sheets and profit/loss statements with strict data security measures.</li>
+        <li>Conducted regular stock counts and maintained detailed inventory records.</li>
+        <li>Coordinated with suppliers to reconcile customer accounts and track orders.</li>
+      </ul>
+      <h3>AR Accountant</h3>
+      <p><strong>Nutopia LLC – Food &amp; Beverage Manufacturing Company | Full Time | Jan 2022 – Dec 2022</strong></p>
+      <ul>
+        <li>Oversaw recording of sales revenue for 10+ branches across various channels.</li>
+        <li>Verified discounts and commissions while reconciling customer credits and bank transactions.</li>
+        <li>Conducted monthly bank reconciliations and audited cash records.</li>
+        <li>Generated tax invoices via the e-tax portal for VAT processes.</li>
+        <li>Prepared segmented sales reports by cost center and product.</li>
+      </ul>
+      <h3>General Accountant</h3>
+      <p><strong>Contracting Company Specialized in Marine and Petroleum Services | Full Time | Feb 2021 – Dec 2021</strong></p>
+      <ul>
+        <li>Coordinated tender submissions and supplier registrations with detailed document analysis.</li>
+        <li>Managed project mobilization, contract execution, and progress invoice issuance.</li>
+        <li>Developed competitive financial bids and controlled project costs through precise budgeting.</li>
+        <li>Processed payroll, managed employee expenses, and conducted regular fixed asset audits.</li>
+      </ul>
+    </div>
+    <!-- قسم التعليم -->
+    <div class="section">
+      <h2>Education</h2>
+      <p><strong>Bachelor’s Degree in Accounting (English Section, 2020)</strong></p>
+      <p>Alexandria University</p>
+    </div>
+    <!-- قسم الشهادات -->
+    <div class="section">
+      <h2>Certifications</h2>
+      <h3>Professional Certifications</h3>
+      <ul>
+        <li>Professional Certification in Cost Accounting (Grade: Excellent) – EAAC Group for Training &amp; Consultancy (Nov 2023 – Jan 2024)</li>
+        <li>Advanced Certification in Public Finance &amp; Tax Regulatory Frameworks – Egyptian Society for Public Finance and Taxation (Dec 2021 – Mar 2022)</li>
+        <li>Professional Certification in Accounting Principles &amp; Software Applications – Takamel for Auditing and Taxes</li>
+        <li>Summer Banking Operations Training Program – Faisal Islamic Bank (Aug 2016)</li>
+      </ul>
+      <h3>Technical Certifications</h3>
+      <ul>
+        <li>20483: Programming in C# – New Horizons Alexandria, Egypt (Feb 2023)</li>
+        <li>20761: Querying Data with Transact-SQL – New Horizons Alexandria, Egypt (Mar 2023)</li>
+        <li>Developing SQL Databases and Data Access Solutions – New Horizons Alexandria, Egypt (Jun 2023)</li>
+      </ul>
+    </div>
+    <!-- قسم المهارات الأساسية -->
+    <div class="section">
+      <h2>Key Skills</h2>
+      <ul>
+        <li><strong>Financial &amp; Accounting Competencies:</strong> Financial Reporting &amp; Analysis, Bank Reconciliations, Cost Control, VAT &amp; Tax Compliance, Tender Management, Inventory Control</li>
+        <li><strong>Data Analysis Tools:</strong> Power BI, DAX, Power Query, SQL, Advanced Excel, Power Pivot</li>
+        <li><strong>Programming Skills:</strong> .NET Framework, C#, VBA</li>
+        <li><strong>Enterprise Software:</strong> ERP Systems, QuickBooks, Financial Excel, POS, Inventory Management</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="section">
-    <h2>Work Experience</h2>
+  <!-- ==================== محتوى السيرة الذاتية باللغة العربية ==================== -->
+  <div id="arabicContent" class="arabic-content arabic">
+    <!-- الهيدر يحتوي على الاسم والمعلومات الأساسية -->
+    <div class="header">
+      <h1>خالد سعيد أحمد</h1>
+      <p><strong>محاسب محترف بخبرة تزيد عن 5 سنوات في إدارة الشؤون المالية والتحليل المالي</strong></p>
+      <p>مصر – الإسكندرية</p>
+      <p><i class="fa-solid fa-phone"></i> +20 1155244367 / +20 1142237574</p>
+      <p><i class="fa-solid fa-envelope"></i> khaledsaidahmed1@gmail.com | <i class="fa-brands fa-linkedin"></i> linkedin.com/in/khaled-said-ahmed</p>
+      <p>تاريخ الميلاد: 27 يونيو 1995</p>
+    </div>
+    <!-- قسم الملخص المهني -->
+    <div class="section">
+      <h2>الملخص المهني</h2>
+      <p>محاسب محترف بخبرة تزيد عن 5 سنوات في إدارة الشؤون المالية والتحليل المالي. يتمتع بخبرة واسعة في إعداد التقارير المالية، التحكم في التكاليف، تسوية الحسابات والرقابة الداخلية. يمتلك مهارات قيادية مثبتة ومعرفة عميقة بأنظمة تخطيط موارد المؤسسات، Power BI، SQL وغيرها من الأدوات المالية المتطورة. ملتزم بتحقيق الكفاءة التشغيلية وتحسين الأداء المالي مع ضمان الامتثال للمعايير الدولية ولوائح الضرائب.</p>
+    </div>
+    <!-- قسم الخبرة العملية -->
+    <div class="section">
+      <h2>الخبرة العملية</h2>
+      <h3>نائب مدير الحسابات</h3>
+      <p><strong>شركة نوتوبيا – شركة تصنيع المواد الغذائية والمشروبات | دوام كامل | يناير 2023 – الحاضر</strong></p>
+      <ul>
+        <li>تبسيط التعديلات الشهرية والاحتياطيات والمستحقات مما أسهم في إعداد تقارير مالية دقيقة وتحليل الفروقات بفعالية.</li>
+        <li>المشاركة في إغلاق الحسابات الشهرية والسنوية من خلال مراجعة أرصدة الحسابات وضمان دقة القوائم المالية.</li>
+        <li>تحسين تكاليف الإنتاج وإدارة المخزون عبر متابعة استخدام المواد الخام وتحليل كفاءة الإنتاج.</li>
+        <li>المساهمة في إعداد التقارير الضريبية والالتزام بلوائح الضرائب المحلية والدولية.</li>
+        <li>قيادة فريق محاسبي مكون من 7 أعضاء مع تعزيز الأداء التشغيلي والرقابة الداخلية.</li>
+      </ul>
+      <h3>محاسب عام (دوام جزئي)</h3>
+      <p><strong>شركة الاستيراد والتوزيع | ديسمبر 2021 – الحاضر</strong></p>
+      <ul>
+        <li>إدارة دورة المحاسبة الكاملة مع إغلاق الحسابات الشهرية والربع سنوية والسنوية بدقة.</li>
+        <li>الحفاظ على دقة الميزانيات العمومية وبيانات الأرباح والخسائر مع تأمين البيانات عبر النسخ الاحتياطي الدوري.</li>
+        <li>تنفيذ جرد دوري للمخزون وتحديث سجلات المخزون لتحليل الفروقات وتحسين إدارة الموارد.</li>
+        <li>التنسيق مع الموردين لتسوية الحسابات ومتابعة المبيعات والمرتجعات وأوامر الشراء بفعالية.</li>
+      </ul>
+      <h3>محاسب الحسابات المدينة</h3>
+      <p><strong>شركة نوتوبيا – شركة تصنيع المواد الغذائية والمشروبات | دوام كامل | يناير 2022 – ديسمبر 2022</strong></p>
+      <ul>
+        <li>الإشراف على تسجيل إيرادات المبيعات لأكثر من 10 فروع عبر قنوات متعددة (نقداً، ائتمان، عبر الإنترنت وغيرها).</li>
+        <li>التحقق من الخصومات والعمولات وتسوية أرصدة العملاء والمعاملات البنكية لتسريع عملية التحصيل.</li>
+        <li>إجراء التسويات البنكية الشهرية وتدقيق النقد الفعلي مقابل السجلات المالية.</li>
+        <li>إعداد الفواتير الضريبية إلكترونيًا لدعم عمليات استرداد ضريبة القيمة المضافة.</li>
+        <li>تحليل الأداء المالي عبر إعداد تقارير مفصلة حسب مركز التكلفة والمنتج.</li>
+      </ul>
+      <h3>محاسب عام</h3>
+      <p><strong>شركة المقاولات المتخصصة في الخدمات البحرية والبترولية | دوام كامل | فبراير 2021 – ديسمبر 2021</strong></p>
+      <ul>
+        <li>تنسيق تقديم العطاءات وتسجيل الموردين من خلال تحليل وثائق العطاءات وإعداد ميزانيات أولية دقيقة.</li>
+        <li>الإشراف على تعبئة المشاريع وتنفيذ العقود وإصدار الفواتير المرحلية وفقاً لتحقيق المعالم المحددة.</li>
+        <li>إعداد عروض مالية تنافسية والتحكم في تكاليف المشاريع عبر إعداد ميزانيات مفصلة وتحليل الفروقات.</li>
+        <li>إدارة عمليات الرواتب ومصاريف الموظفين مع إجراء تدقيق دوري للأصول الثابتة.</li>
+      </ul>
+    </div>
+    <!-- قسم التعليم -->
+    <div class="section">
+      <h2>التعليم</h2>
+      <p><strong>درجة البكالوريوس في المحاسبة (القسم الإنجليزي، 2020)</strong></p>
+      <p>جامعة الإسكندرية</p>
+    </div>
+    <!-- قسم الشهادات -->
+    <div class="section">
+      <h2>الشهادات</h2>
+      <h3>الشهادات المهنية</h3>
+      <ul>
+        <li>الشهادة المهنية في محاسبة التكاليف (الدرجة: ممتاز) – مجموعة EAAC للتدريب والاستشارات (نوفمبر 2023 – يناير 2024)</li>
+        <li>الشهادة المتقدمة في المالية العامة وإطار الضرائب – الجمعية المصرية للمالية العامة والضرائب (ديسمبر 2021 – مارس 2022)</li>
+        <li>الشهادة المهنية في مبادئ المحاسبة وتطبيقات البرمجيات – شركة تكامل للتدقيق والضرائب</li>
+        <li>برنامج التدريب الصيفي على عمليات البنوك – بنك فيصل الإسلامي (أغسطس 2016)</li>
+      </ul>
+      <h3>الشهادات التقنية</h3>
+      <ul>
+        <li>20483: برمجة C# – نيو هورايزونز، الإسكندرية، مصر (فبراير 2023)</li>
+        <li>20761: الاستعلام باستخدام Transact-SQL – نيو هورايزونز، الإسكندرية، مصر (مارس 2023)</li>
+        <li>تطوير قواعد بيانات SQL وحلول الوصول إلى البيانات – نيو هورايزونز، الإسكندرية، مصر (يونيو 2023)</li>
+      </ul>
+    </div>
+    <!-- قسم المهارات الأساسية -->
+    <div class="section">
+      <h2>المهارات الأساسية</h2>
+      <ul>
+        <li><strong>الكفاءات المالية والمحاسبية:</strong> إعداد التقارير والتحليل المالي، تسويات الحسابات البنكية، التحكم في التكاليف، الامتثال للضرائب وضريبة القيمة المضافة، إدارة العطاءات والمناقصات، إدارة المخزون والموارد.</li>
+        <li><strong>أدوات تحليل البيانات:</strong> Power BI، DAX، Power Query، SQL، Excel متقدم، Power Pivot.</li>
+        <li><strong>المهارات البرمجية:</strong> .NET Framework، C#، VBA.</li>
+        <li><strong>برمجيات المؤسسات:</strong> أنظمة ERP، QuickBooks، Financial Excel، POS، أنظمة إدارة المخزون.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== مودال الشكر عند نهاية الصفحة ==================== -->
+  <div id="thankYouModal" class="modal"></div>
+
+  <!-- ==================== مودال الخروج عند محاولة مغادرة الصفحة ==================== -->
+  <div id="exitModal" class="modal"></div>
+
+  <script>
+    /* ---------- دالة لضبط اللغة الافتراضية وتوحيد لغة الرسائل ---------- */
+    function initLanguage() {
+      var userLang = navigator.language || navigator.userLanguage;
+      var defaultLang = userLang.startsWith("ar") ? "ar" : "en";
+      
+      if (defaultLang === "ar") {
+        // عرض المحتوى العربي كافتراضي
+        document.getElementById('englishContent').style.display = 'none';
+        document.getElementById('arabicContent').style.display = 'block';
+        // إعداد شاشة الترحيب باللغة العربية
+        document.getElementById('welcomeModal').innerHTML = `
+          <div class="modal-content">
+            <h2><i class="fa-solid fa-handshake"></i> مرحباً بكم في سيرتي الذاتية</h2>
+            <p>يسرنا تواجدكم هنا. تم ضبط اللغة تلقائياً بناءً على إعدادات متصفحكم.</p>
+            <div class="modal-actions">
+              <button onclick="printCV()"><i class="fa-solid fa-print"></i> طباعة السيرة</button>
+              <button onclick="downloadPDF()"><i class="fa-solid fa-download"></i> تحميل PDF</button>
+            </div>
+            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> إغلاق</button>
+          </div>
+        `;
+        // إعداد مودال الشكر باللغة العربية
+        document.getElementById('thankYouModal').innerHTML = `
+          <div class="modal-content">
+            <h2><i class="fa-solid fa-thumbs-up"></i> شكراً لزيارتكم!</h2>
+            <p>نقدّر اهتمامكم. للتواصل مباشرة:</p>
+            <p>
+              <a href="https://wa.me/201155254367" target="_blank"><i class="fa-brands fa-whatsapp"></i> واتساب (01155254367)</a>
+              &nbsp;|&nbsp;
+              <a href="mailto:khaledsaidahmed1@gmail.com?subject=Inquiry" target="_blank"><i class="fa-solid fa-envelope"></i> إرسال رسالة</a>
+            </p>
+            <button class="close-modal" onclick="closeThankYouModal()"><i class="fa-solid fa-xmark"></i> إغلاق</button>
+          </div>
+        `;
+        // إعداد مودال الخروج باللغة العربية
+        document.getElementById('exitModal').innerHTML = `
+          <div class="modal-content">
+            <h2><i class="fa-solid fa-user-friends"></i> قبل المغادرة</h2>
+            <p>ندعوكم لزيارة صفحة لينكدإن الخاصة بي لمتابعة آخر التحديثات والتواصل.</p>
+            <button onclick="window.open('https://www.linkedin.com/in/khaled-said-ahmed', '_blank')"><i class="fa-brands fa-linkedin"></i> زيارة لينكدإن</button>
+            <button class="close-modal" onclick="closeExitModal()"><i class="fa-solid fa-xmark"></i> إغلاق</button>
+          </div>
+        `;
+      } else {
+        // اللغة الإنجليزية كافتراضية
+        document.getElementById('englishContent').style.display = 'block';
+        document.getElementById('arabicContent').style.display = 'none';
+        // إعداد شاشة الترحيب باللغة الإنجليزية
+        document.getElementById('welcomeModal').innerHTML = `
+          <div class="modal-content">
+            <h2><i class="fa-solid fa-handshake"></i> Welcome to My CV</h2>
+            <p>We are delighted to have you here. Please choose an action:</p>
+            <div class="modal-actions">
+              <button onclick="printCV()"><i class="fa-solid fa-print"></i> Print CV</button>
+              <button onclick="downloadPDF()"><i class="fa-solid fa-download"></i> Download PDF</button>
+            </div>
+            <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+          </div>
+        `;
+        document.getElementById('thankYouModal').innerHTML = `
+          <div class="modal-content">
+            <h2><i class="fa-solid fa-thumbs-up"></i> Thank You for Visiting!</h2>
+            <p>We appreciate your interest. For direct contact:</p>
+            <p>
+              <a href="https://wa.me/201155254367" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp (01155254367)</a>
+              &nbsp;|&nbsp;
+              <a href="mailto:khaledsaidahmed1@gmail.com?subject=Inquiry" target="_blank"><i class="fa-solid fa-envelope"></i> Send Email</a>
+            </p>
+            <button class="close-modal" onclick="closeThankYouModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+          </div>
+        `;
+        document.getElementById('exitModal').innerHTML = `
+          <div class="modal-content">
+            <h2><i class="fa-solid fa-user-friends"></i> Before You Leave</h2>
+            <p>We invite you to visit my LinkedIn page for the latest updates and networking.</p>
+            <button onclick="window.open('https://www.linkedin.com/in/khaled-said-ahmed', '_blank')"><i class="fa-brands fa-linkedin"></i> Visit LinkedIn</button>
+            <button class="close-modal" onclick="closeExitModal()"><i class="fa-solid fa-xmark"></i> Close</button>
+          </div>
+        `;
+      }
+    }
     
-    <h3>Deputy Account Manager</h3>
-    <p><strong>Nutopia LLC – Food &amp; Beverage Manufacturing Company | Full Time | Jan 2023 – Present</strong></p>
-    <ul>
-      <li>Streamlined monthly adjustments, provisions, and accruals, resulting in actionable financial reports and enhanced variance analysis.</li>
-      <li>Played a pivotal role in monthly and annual account closures by reviewing trial balances, maintaining accurate balance sheets, and managing general ledger accounts.</li>
-      <li>Optimized production costs and inventory management through careful monitoring of raw material usage and production efficiency metrics.</li>
-      <li>Assisted in the preparation of taxation reports to ensure regulatory compliance.</li>
-      <li>Led a 7-member accounting team, overseeing daily operations and ensuring timely completion of accounting tasks.</li>
-    </ul>
+    // عند تحميل الصفحة، يتم ضبط اللغة تلقائيًا وعرض شاشة الترحيب
+    document.addEventListener("DOMContentLoaded", function() {
+      initLanguage();
+      document.getElementById('welcomeModal').style.display = 'block';
+    });
     
-    <h3>General Accountant (Part-Time)</h3>
-    <p><strong>Import and Distribution Company | Dec 2021 – Present</strong></p>
-    <ul>
-      <li>Managed full-cycle accounting operations, including monthly, quarterly, and annual closings.</li>
-      <li>Maintained accurate balance sheets and profit/loss statements with strict attention to data security through regular database backups.</li>
-      <li>Conducted regular stock counts and maintained detailed stock ledgers, enhancing inventory management and variance analysis.</li>
-      <li>Coordinated with suppliers to reconcile customer accounts and track sales, returns, and purchase orders efficiently.</li>
-    </ul>
+    /* ---------- دوال التحكم في المودالات والأزرار ---------- */
+    // إخفاء شاشة الترحيب
+    function closeModal() {
+      document.getElementById('welcomeModal').style.display = 'none';
+    }
     
-    <h3>AR Accountant</h3>
-    <p><strong>Nutopia LLC – Food &amp; Beverage Manufacturing Company | Full Time | Jan 2022 – Dec 2022</strong></p>
-    <ul>
-      <li>Oversaw the recording of sales revenue for 10+ branches across multiple channels (cash, credit, online, etc.).</li>
-      <li>Verified discounts and commissions while reconciling customer credits and bank transactions to expedite collections.</li>
-      <li>Conducted monthly bank reconciliations and audited physical cash against ledger records.</li>
-      <li>Generated tax invoices via the e-tax portal to support VAT return processes.</li>
-      <li>Prepared segmented sales reports by cost center, product, and performance metrics to assist in month-end closures.</li>
-    </ul>
+    // تبديل اللغة بواسطة زر القائمة العلوية
+    function toggleLanguage() {
+      var en = document.getElementById('englishContent');
+      var ar = document.getElementById('arabicContent');
+      if (en.style.display === 'none') {
+        en.style.display = 'block';
+        ar.style.display = 'none';
+      } else {
+        en.style.display = 'none';
+        ar.style.display = 'block';
+      }
+    }
     
-    <h3>General Accountant</h3>
-    <p><strong>Contracting Company Specialized in Marine and Petroleum Services | Full Time | Feb 2021 – Dec 2021</strong></p>
-    <ul>
-      <li>Coordinated tender submissions and supplier registrations by analyzing tender documents and developing reliable preliminary budgets.</li>
-      <li>Managed project mobilization, contract execution, and the issuance of progress invoices based on milestone achievements.</li>
-      <li>Developed competitive financial bids and controlled project costs through detailed budgeting and variance analysis.</li>
-      <li>Processed payroll, managed employee expenses and cash advances, and conducted regular fixed asset audits.</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Education</h2>
-    <p><strong>Bachelor’s Degree in Accounting (English Section, 2020)</strong></p>
-    <p>Alexandria University</p>
-  </div>
-
-  <div class="section">
-    <h2>Certifications</h2>
-    <h3>Professional Certifications</h3>
-    <ul>
-      <li>Professional Certification in Cost Accounting (Grade: Excellent) – EAAC Group for Training &amp; Consultancy (Nov 2023 – Jan 2024)</li>
-      <li>Advanced Certification in Public Finance &amp; Tax Regulatory Frameworks – Egyptian Society for Public Finance and Taxation (Dec 2021 – Mar 2022)</li>
-      <li>Professional Certification in Accounting Principles &amp; Software Applications (QuickBooks-Financial Excel) – Takamel for Auditing and Taxes</li>
-      <li>Summer Banking Operations Training Program – Faisal Islamic Bank (Aug 2016)</li>
-    </ul>
-    <h3>Technical Certifications</h3>
-    <ul>
-      <li>20483: Programming in C# – New Horizons Alexandria, Egypt (Feb 2023)</li>
-      <li>20761: Querying Data with Transact-SQL – New Horizons Alexandria, Egypt (Mar 2023)</li>
-      <li>Developing SQL Databases and Data Access Solutions – New Horizons Alexandria, Egypt (Jun 2023)</li>
-    </ul>
-  </div>
-
-  <div class="section">
-    <h2>Key Skills</h2>
-    <ul>
-      <li><strong>Financial &amp; Accounting Competencies:</strong> Financial Reporting &amp; Analysis, Bank Reconciliations &amp; Accounts Receivable Management, Cost Control &amp; Variance Analysis, Taxation &amp; VAT Compliance, Quotations and Tender Management, Inventory &amp; Stock Management</li>
-      <li><strong>Data Analysis Tools:</strong> Power BI, DAX, Power Query, SQL, Advanced Excel, Power Pivot</li>
-      <li><strong>Programming Skills:</strong> .NET Framework, C#, VBA</li>
-      <li><strong>Enterprise &amp; Financial Software:</strong> ERP Systems, QuickBooks, Financial Excel, POS, Inventory Control Systems</li>
-    </ul>
-  </div>
-
+    // دالة الطباعة التي تخفي شاشة الترحيب قبل الطباعة
+    function printCV() {
+      document.getElementById('welcomeModal').style.display = 'none';
+      window.print();
+    }
+    
+    // دالة التحميل بصيغة PDF التي تخفي شاشة الترحيب قبل الالتقاط
+    function downloadPDF() {
+      document.getElementById('welcomeModal').style.display = 'none';
+      var element = document.getElementById('englishContent').style.display !== 'none' 
+                    ? document.getElementById('englishContent') 
+                    : document.getElementById('arabicContent');
+      var opt = {
+        margin: 0.5,
+        filename: 'CV.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+    
+    // عرض مودال "شكراً لزيارتكم" عند الوصول لنهاية الصفحة
+    var thankYouShown = false;
+    window.addEventListener("scroll", function() {
+      if (!thankYouShown && (window.innerHeight + window.pageYOffset) >= document.body.offsetHeight - 50) {
+        document.getElementById("thankYouModal").style.display = "block";
+        thankYouShown = true;
+      }
+    });
+    function closeThankYouModal() {
+      document.getElementById("thankYouModal").style.display = "none";
+    }
+    
+    // عرض مودال الخروج عند محاولة مغادرة الصفحة (اكتشاف خروج الماوس من النافذة من الأعلى)
+    document.addEventListener("mouseout", function(e) {
+      if (e.clientY < 0) {
+        document.getElementById("exitModal").style.display = "block";
+      }
+    });
+    function closeExitModal() {
+      document.getElementById("exitModal").style.display = "none";
+    }
+    
+    // تأثير التمرير على الهيدر
+    var lastScrollTop = 0;
+    window.addEventListener("scroll", function() {
+      var st = window.pageYOffset || document.documentElement.scrollTop;
+      if (st > lastScrollTop) {
+        document.body.classList.add("scrolling-down");
+        document.body.classList.remove("scrolling-up");
+      } else {
+        document.body.classList.add("scrolling-up");
+        document.body.classList.remove("scrolling-down");
+      }
+      lastScrollTop = st <= 0 ? 0 : st;
+    }, false);
+  </script>
 </body>
 </html>
